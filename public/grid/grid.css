@@ -1,0 +1,47 @@
+.grid {
+    /*width: -webkit-min-content;*/
+    /*width: -moz-min-content;*/
+    /*width: min-content;*/
+    margin-top: 30px;
+    text-align: left;
+    background-color: #fff;
+    /*min-width: 100%;*/
+}
+
+.grid table {
+    margin-top: 30px;
+}
+
+.grid thead th {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center !important;
+}
+
+.grid thead th, .grid thead td, .grid tbody td {
+
+    border-right: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.grid tbody tr{
+    text-align: center !important;
+}
+
+.grid thead tr{
+    text-align: center !important;
+}
+
+.grid tbody tr:nth-child(even) td {
+    background-color: #fafafa;
+}
+
+.grid tfoot td {
+    padding-top: 10px;
+}
+
+.grid tbody tr:hover>td {
+    background-color: #d7effb;
+}
+
