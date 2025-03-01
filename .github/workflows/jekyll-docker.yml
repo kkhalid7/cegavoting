@@ -32,7 +32,14 @@ jobs:
           fi
 
       - name: List contents of _site for debugging
-        run: ls -la _site
+        run: |
+          echo "Listing _site directory contents:" 
+          ls -la _site
+          if [ -z "$(ls -A _site)" ]; then
+            echo "⚠️ WARNING: _site directory is empty!"
+          else
+            echo "✅ _site directory contains files."
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -56,7 +63,13 @@ jobs:
       - name: List downloaded _site directory
         run: |
           echo "Checking _site contents before deployment..."
-          ls -la _site || echo "❌ ERROR: _site directory not found!"
+          ls -la _site
+          if [ -z "$(ls -A _site)" ]; then
+            echo "❌ ERROR: _site directory is empty! Deployment may fail."
+            exit 1
+          else
+            echo "✅ _site directory contains files. Ready for deployment."
+          fi
 
       - name: Deploy to GitHub Pages
         id: deployment
