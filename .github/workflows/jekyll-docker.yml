@@ -19,11 +19,21 @@ jobs:
       - name: Build the site in the jekyll/builder container
         run: |
           docker run \
-          -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
+          -v ${{ github.workspace }}:/srv/jekyll \
+          -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
           jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+      
+      - name: Check if _site directory exists
+        run: |
+          if [ ! -d "_site" ]; then
+            echo "Error: _site directory does not exist. Jekyll build may have failed."
+            exit 1
+          fi
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3  # Updated to the latest version
+        uses: actions/upload-artifact@v4  # Use latest version
         with:
+          name: jekyll-site
           path: _site
 
   deploy:
@@ -33,6 +43,12 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: jekyll-site
+          path: _site
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v3  # Ensure you use the latest version
+        uses: actions/deploy-pages@v3
