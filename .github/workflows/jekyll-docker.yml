@@ -27,17 +27,17 @@ jobs:
       - name: Check if _site directory exists
         run: |
           if [ ! -d "_site" ]; then
-            echo "Error: _site directory does not exist. Jekyll build may have failed."
+            echo "❌ ERROR: _site directory does not exist. Jekyll build may have failed."
             exit 1
           fi
 
-      - name: List files to debug
+      - name: List contents of _site for debugging
         run: ls -la _site
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: github-pages  # Ensure artifact name matches what deploy-pages expects
+          name: github-pages  # Must match the name in deploy step
           path: _site
 
   deploy:
@@ -50,9 +50,16 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages  # Match the uploaded artifact name
+          name: github-pages  # Must match the uploaded artifact name
           path: _site
+
+      - name: List downloaded _site directory
+        run: |
+          echo "Checking _site contents before deployment..."
+          ls -la _site || echo "❌ ERROR: _site directory not found!"
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
+        with:
+          artifact_name: github-pages
